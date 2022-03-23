@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  openvpn_server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: openvpn_server_test
+    image: openvpn-test-local:latest
+    restart: always
+    tty: true
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    networks:
+      ovpn_test_net:
+        ipv4_address: 172.19.19.2
+    volumes:
+      - ovpn-conf:/etc/openvpn
+  openvpn_client:
+    container_name: openvpn_client_test
+    image: openvpn-test-local:latest
+    restart: always
+    tty: true
+    depends_on:
+      - openvpn_server
+    entrypoint: "sleep"
+    command: "300"
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    networks:
+      ovpn_test_net:
+    volumes:
+      - ovpn-conf:/etc/openvpn
+
+networks:
+  ovpn_test_net:
+    name: ovpn_test_net
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.19.0/24
+
+volumes:
+  ovpn-conf:

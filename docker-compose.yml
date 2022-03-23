@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  openvpn:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: openvpn
+    image: openvpn-local:latest
+    restart: always
+    tty: true
+    networks:
+      ovpn_net:
+        ipv4_address: 172.19.0.2
+    environment:
+      - VPN_SRV_COMMON_NAME=openvpn-server.local
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    ports:
+      - 1194:1194/udp
+#    volumes:
+#      - /srv/openvpn/server:/etc/openvpn/server
+#      - /srv/openvpn/client:/etc/openvpn/client
+
+networks:
+  ovpn_net:
+    name: ovpn_net
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.0.0/24

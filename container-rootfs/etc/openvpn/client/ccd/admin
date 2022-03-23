@@ -1,0 +1,2 @@
+#ifconfig-push 10.8.0.9 10.8.0.10  ### for some reasone this no longer works
+ifconfig-push 10.8.0.9 255.255.0.0
