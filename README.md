@@ -65,3 +65,4 @@ make exec
 
 1. Make the setup configurable via env vars (a .env file for docker-compose)
 2. Move common variables for scripts to one file
+3. Use the DNS resolver on the VPN server
