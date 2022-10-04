@@ -2,7 +2,7 @@ client
 dev tun
 proto udp
 
-remote ez-net.lambdacore.gq 1194
+remote my-vpn.example.com 1194
 #remote openvpn_server 1194 ### for testing
 
 resolv-retry infinite
