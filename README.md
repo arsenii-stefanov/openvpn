@@ -33,6 +33,22 @@ Run this command to see all available shortcuts
 make help
 ```
 
+### Initial Setup
+
+1. Replace `remote` in `container-rootfs/etc/openvpn/client-config.template`
+
+2. Build an image and start the container
+
+```
+make start
+```
+
+3. Wait for the VPN server to start up (wait for `Initialization Sequence Completed`)
+
+```
+make logs
+```
+
 ### Create a client certificate
 
 ```
