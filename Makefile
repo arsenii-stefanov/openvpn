@@ -10,11 +10,11 @@ vpn_client_compose_svc_name_test:="openvpn_client"
 .DEFAULT_GOAL:=help
 
 define vpn_compose
-  docker-compose -f $(vpn_compose_file) ${1}
+  docker compose -f $(vpn_compose_file) ${1}
 endef
 
 define vpn_compose_test
-  docker-compose -f $(vpn_compose_file_test) ${1}
+  docker compose -f $(vpn_compose_file_test) ${1}
 endef
 
 .PHONY: build start stop restart logs exec connect test-build test-start test-stop test-logs test-client-create-cert test-client-create-user test-client-delete-cert test-client-delete-user test-connection
