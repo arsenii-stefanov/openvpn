@@ -28,5 +28,8 @@ echo "[INIT] Ensure that a Server Certificate exist"
 echo "[INIT] Apply iptables rules"
 ./iptables.sh
 
+echo "[INIT] Start DNS server"
+dnsmasq -C /etc/dnsmasq.conf
+
 echo "[INIT] Start OpenVPN Server"
 openvpn --config ${OVPN_SRV_CONF}

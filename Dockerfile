@@ -1,7 +1,8 @@
 ### BASE_IMAGE=alpine:3.15.1
 ARG BASE_IMAGE=alpine@sha256:14b55f5bb845c7b810283290ce057f175de87838be56f49060e941580032c60c
 ARG OPENVPN_VER=2.5.6-r0
-ARG OPENSSL_VER=1.1.1q-r0
+#ARG OPENSSL_VER=1.1.1q-r0
+ARG OPENSSL_VER=1.1.1w-r1
 ARG OPENVPN_WORKDIR=/etc/openvpn
 
 FROM ${BASE_IMAGE}
@@ -15,7 +16,8 @@ RUN apk add --no-cache \
             openssl=${OPENSSL_VER} \
             bind-tools \
             bash \
-            curl
+            curl \
+            dnsmasq
 
 COPY container-rootfs/ /
 

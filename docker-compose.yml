@@ -9,6 +9,8 @@ services:
     image: openvpn-local:latest
     restart: always
     tty: true
+    dns:
+      - 8.8.8.8
     networks:
       ovpn_net:
         ipv4_address: 172.19.0.2

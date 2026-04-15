@@ -13,9 +13,11 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun
+#    ports:
+#      - 1194:1194/udp 
     networks:
       ovpn_test_net:
-        ipv4_address: 172.19.19.2
+ #       ipv4_address: 172.19.19.2
     volumes:
       - ovpn-conf:/etc/openvpn
   openvpn_client:
@@ -44,8 +46,8 @@ networks:
       com.docker.network.enable_ipv6: "false"
     ipam:
       driver: default
-      config:
-        - subnet: 172.19.19.0/24
+#      config:
+#        - subnet: 172.19.19.0/24
 
 volumes:
   ovpn-conf:
