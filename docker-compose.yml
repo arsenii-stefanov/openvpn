@@ -1,12 +1,7 @@
-version: '3.8'
-
 services:
   openvpn:
-    build:
-      context: ./
-      dockerfile: Dockerfile
     container_name: openvpn
-    image: openvpn-local:latest
+    image: warkat/openvpn:2.7.0-no-configs
     restart: always
     tty: true
     dns:
@@ -22,9 +17,16 @@ services:
       - /dev/net/tun
     ports:
       - 1194:1194/udp
-#    volumes:
-#      - /srv/openvpn/server:/etc/openvpn/server
-#      - /srv/openvpn/client:/etc/openvpn/client
+    volumes:
+       - type: bind
+         source: container-rootfs/etc/openvpn
+         target: /etc/openvpn
+       - type: bind
+         source: container-rootfs/etc/dnsmasq
+         target: /etc/dnsmasq
+       - type: bind
+         source: container-rootfs/srv/bin
+         target: /srv/bin
 
 networks:
   ovpn_net:
