@@ -35,15 +35,56 @@ make help
 
 ### Initial Setup
 
-1. Replace `remote` in `container-rootfs/etc/openvpn/client-config.template`
+1. Clone this repository
+```
+mkdir -p /srv/git
+cd /srv/git
+git clone https://github.com/arsenii-stefanov/openvpn.git
+cd /srv/git/openvpn
+```
 
-2. Build an image and start the container
+2. Replace `remote` in `container-rootfs/etc/openvpn/client-config.template`
+
+3. Either build an image or use the one in `docker-compose.yml` (recommended)
+```
+cd /srv/git/openvpn
+
+./build.sh # not recommended
+
+docker compose pull # recommended
+```
+
+4. Ensure that `systemd-resolved` is stopped and disabled
+```
+systemctl disable systemd-resolved.service
+systemctl stop systemd-resolved.service
+systemctl status systemd-resolved.service
+```
+
+5. Prepare the config files
+```
+cd /srv/git/openvpn
+
+rm container-rootfs/etc/openvpn/client/ccd/*
+rm container-rootfs/etc/openvpn/client/*
+
+echo 'client-1@example.com,10.8.0.9' > container-rootfs/etc/openvpn/client/ipp.txt
+echo 'client-2@example.com,10.8.0.13' >> container-rootfs/etc/openvpn/client/ipp.txt
+
+echo 'ifconfig-push 10.8.0.9 255.255.0.0' > container-rootfs/etc/openvpn/client/ccd/client-1@example.com
+echo 'ifconfig-push 10.8.0.13 255.255.0.0' > container-rootfs/etc/openvpn/client/ccd/client-2@example.com
+
+echo 'USERS[client-1@example.com]=",full_access,"' > container-rootfs/etc/openvpn/iptables_vpn_users.sh
+echo 'USERS[client-2@example.com]=",full_access,"' >> container-rootfs/etc/openvpn/iptables_vpn_users.sh
+```
+
+6. Start OpenVPN
 
 ```
 make start
 ```
 
-3. Wait for the VPN server to start up (wait for `Initialization Sequence Completed`)
+7. Wait for the VPN server to start up (wait for `Initialization Sequence Completed`)
 
 ```
 make logs
@@ -53,32 +94,31 @@ make logs
 
 ```
 make exec
-./openvpn_helper.sh --client-create-cert client-1 3650
+./openvpn_helper.sh --client-create-cert client-1@example.com 3650
 ```
 
 ### Create a user
 
 ```
 make exec
-./openvpn_helper.sh --client-create-user client-1@gmail.com
+./openvpn_helper.sh --client-create-user client-1@example.com
 ```
 
 ### Revoke a client certificate
 
 ```
 make exec
-./openvpn_helper.sh --client-delete-cert client-1
+./openvpn_helper.sh --client-delete-cert client-1@example.com
 ```
 
 ### Delete a user
 
 ```
 make exec
-./openvpn_helper.sh --client-delete-user client-1@gmail.com
+./openvpn_helper.sh --client-delete-user client-1@example.com
 ```
 
 ## ToDo List
 
 1. Make the setup configurable via env vars (a .env file for docker-compose)
 2. Move common variables for scripts to one file
-3. Use the DNS resolver on the VPN server
