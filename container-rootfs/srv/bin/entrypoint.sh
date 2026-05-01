@@ -29,7 +29,7 @@ echo "[INIT] Apply iptables rules"
 ./iptables.sh
 
 echo "[INIT] Start DNS server"
-dnsmasq -C /etc/dnsmasq.conf
+dnsmasq -C /etc/dnsmasq/dnsmasq.conf
 
 echo "[INIT] Start OpenVPN Server"
 openvpn --config ${OVPN_SRV_CONF}
